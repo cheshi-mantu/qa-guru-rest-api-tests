@@ -13,8 +13,8 @@ import java.net.MalformedURLException;
 import java.net.URL;
 
 import static com.codeborne.selenide.Browsers.CHROME;
-import static helpers.EnvTkb.isRemoteDriver;
-import static helpers.EnvTkb.remoteDriverUrl;
+import static helpers.Environment.isRemoteDriver;
+import static helpers.Environment.remoteDriverUrl;
 
 
 public class CustomWebDriver implements WebDriverProvider {
