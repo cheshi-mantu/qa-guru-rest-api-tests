@@ -54,7 +54,7 @@ class RestApiTests extends TestBase {
                 .body("total", is(12));
     }
     @Test
-    void parseJsonFromApiGet() {
+    void parseJsonFromApiGetHamcrestAssert() {
         RestAssured.baseURI = "https://reqres.in";
         step("hello", ()-> {
             Integer resultsTotal = given()
@@ -67,6 +67,18 @@ class RestApiTests extends TestBase {
                     .path("total");
             assertThat(resultsTotal, is(12));
 
+        });
+    }
+    @Test
+    void parseJsonFromApiGetRestAssrdOnly() {
+        RestAssured.baseURI = "https://reqres.in";
+        step("hello", ()-> {
+                given()
+                .when()
+                .get("/api/users?page=2")
+                .then()
+                .statusCode(200)
+                .body("total", is(12));
         });
     }
 
