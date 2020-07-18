@@ -14,9 +14,11 @@ import static helpers.Environment.isVideoOn;
 
 public class TestBase {
 
-//    @BeforeAll
-//        SelenideLogger.addListener("AllureSelenide", new AllureSelenide().screenshots(true).savePageSource(true));
-//        configureSelenide();
+    @BeforeAll
+        public static void beforeAll(){
+        SelenideLogger.addListener("AllureSelenide", new AllureSelenide().screenshots(true).savePageSource(true));
+        configureSelenide();
+    }
 
 //    @BeforeEach
 //    public void BeforeEachTest(){
