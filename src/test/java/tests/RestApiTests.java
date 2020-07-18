@@ -22,7 +22,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 @Story("REST API tests with REST Assured")
 @Tag("rest_api_tests")
 class RestApiTests extends TestBase {
-    public String baseUrl = "https://reqres.in";
+    private String baseUrl = "https://reqres.in";
     Integer resultsTotal;
 
     @Test
