@@ -1,5 +1,6 @@
 package tests;
 
+import io.qameta.allure.Description;
 import io.qameta.allure.Epic;
 import io.qameta.allure.Feature;
 import io.qameta.allure.Story;
@@ -24,23 +25,37 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 class RestApiTests extends TestBase {
     private String baseUrl = "https://reqres.in";
     Integer resultsTotal;
+    String usersList;
 
     @Test
+    @Description("Simple RestAssured get request and send to System.out")
     void simpleGetRestAssured() {
-        String usersList = get(baseUrl + "/api/users?page=2").asString();
-        System.out.println(usersList);
+        step("get by RestAssured, print to the std system output", ()-> {
+            usersList = get(baseUrl + "/api/users?page=2").asString();
+            System.out.println(usersList);
+        });
     }
+
     @Test
+    @Description("Simple RestAssured with assert by JUnit5 means usersList length > 0")
     void simpleApiGetJUnitAssertTrue() {
-        String usersList = get(baseUrl + "/api/users?page=2").asString();
-        assertTrue(usersList.length() > 0, "usersList length: " +
-                usersList.length() + " with data: " + usersList);
+        step("get with rest assured, assert by JUnit5 with comments", ()-> {
+            usersList = get(baseUrl + "/api/users?page=2").asString();
+            assertTrue(usersList.length() > 0, "usersList length: " +
+                    usersList.length() + " with data: " + usersList);
+        });
+
     }
     @Test
+    @Description("Simple RestAssured get request assertion by means of hamcrest assertThat ans \'is\'")
     void simpleApiGetHamcrestAssertThat() {
-        String usersList = get(baseUrl + "/api/users?page=2").asString();
-        assertThat(usersList.length(), is(not(nullValue())));
+        step("set usersList as the result of the get response by RestAssured" +
+                "check usersList length is not null (hamcrest)", ()-> {
+            usersList = get(baseUrl + "/api/users?page=2").asString();
+            assertThat(usersList.length(), is(not(nullValue())));
+        });
     }
+
     @Test
     void restAssuredNormalget() {
         RestAssured.baseURI = baseUrl;
