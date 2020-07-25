@@ -27,6 +27,7 @@ class RestApiTests extends TestBase {
     Integer resultsTotal;
     String usersList;
     String email;
+    String returnedValue;
 
     @Test
     @Description("1. Simple RestAssured get request and sending it to System.out. No assertion.")
@@ -103,7 +104,7 @@ class RestApiTests extends TestBase {
     @Description("6. Variation of 5. Assertion by hamcrest's \'is\'")
     void parseJsonFromApiGetRestAssrdOnly() {
         RestAssured.baseURI = baseUrl;
-        step("hello", ()-> {
+        step("Build get request for group of users, getting the reponse. Assert.", ()-> {
                 given()
                 .filter(new AllureRestAssured())
                 .log().all()
@@ -115,7 +116,7 @@ class RestApiTests extends TestBase {
         });
     }
     @Test
-    @Description("7. Deeper parsing of response")
+    @Description("7. Deeper parsing of response. Parse response by index in array")
     void parseJsonParseJsonDeeper() {
         RestAssured.baseURI = baseUrl;
         step("hello", ()-> {
@@ -134,7 +135,67 @@ class RestApiTests extends TestBase {
             assertThat(email, is("tobias.funke@reqres.in"));
         });
     }
-
+    @Test
+    @Description("8. Deeper parsing of response. Get response by key in dict")
+    void parseJsonParseDictValues() {
+        RestAssured.baseURI = baseUrl;
+        step("creating get request for ", ()-> {
+            given()
+                    .filter(new AllureRestAssured())
+                    .log().all();
+            returnedValue = get("/api/users?page=2")
+                        .then()
+                        .statusCode(200)
+                        .extract()
+                        .response()
+                        .path("ad.company");
+        });
+        System.out.println("Response value from BE:" + returnedValue);
+        step("Should be StatusCode Wekly", ()-> {
+            assertThat(returnedValue, is("StatusCode Weekly"));
+        });
+    }
+    @Test
+    @Description("9. Single User data check")
+    void parseJsonForSingleUser() {
+        RestAssured.baseURI = baseUrl;
+        step("Creating get request for single user \'/api/users/2\' ", ()-> {
+            given()
+                    .filter(new AllureRestAssured())
+                    .log().all();
+            returnedValue = get("/api/users/2")
+                        .then()
+                        .statusCode(200)
+                        .extract()
+                        .response()
+                        .path("data.first_name");
+        });
+        System.out.println("Response value from BE:" + returnedValue);
+        step("Returned first name should be Janet", ()-> {
+            assertThat(returnedValue, is("Janet"));
+        });
+    }
+    @Test
+    @Description("10. Non existing user data check")
+    void parseJsonUserDontExist() {
+        RestAssured.baseURI = baseUrl;
+        step("Creating get request for single user \'/api/users/2\' ", ()-> {
+            given()
+                    .filter(new AllureRestAssured())
+                    .log().all();
+            returnedValue = get("/api/users/23")
+                        .then()
+                        .statusCode(404)
+                        .extract()
+                        .response()
+                        .path("data.first_name");
+        });
+        System.out.println("Response value from BE:" + returnedValue);
+        step("Returned first name should be NULL", ()-> {
+            //assertThat(returnedValue, isEmptyOrNullString());
+            assertThat(returnedValue, is(nullValue()));
+        });
+    }
 
 
 }
