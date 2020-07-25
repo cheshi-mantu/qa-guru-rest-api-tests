@@ -26,9 +26,10 @@ class RestApiTests extends TestBase {
     private String baseUrl = "https://reqres.in";
     Integer resultsTotal;
     String usersList;
+    String email;
 
     @Test
-    @Description("Simple RestAssured get request and send to System.out")
+    @Description("1. Simple RestAssured get request and sending it to System.out. No assertion.")
     void simpleGetRestAssured() {
         step("get by RestAssured, print to the std system output", ()-> {
             usersList = get(baseUrl + "/api/users?page=2").asString();
@@ -37,17 +38,17 @@ class RestApiTests extends TestBase {
     }
 
     @Test
-    @Description("Simple RestAssured with assert by JUnit5 means usersList length > 0")
+    @Description("2. Simple RestAssured with assert by JUnit5 means usersList length > 0")
     void simpleApiGetJUnitAssertTrue() {
         step("get with rest assured, assert by JUnit5 with comments", ()-> {
             usersList = get(baseUrl + "/api/users?page=2").asString();
             assertTrue(usersList.length() > 0, "usersList length: " +
                     usersList.length() + " with data: " + usersList);
         });
-
     }
+
     @Test
-    @Description("Simple RestAssured get request assertion by means of hamcrest assertThat ans \'is\'")
+    @Description("3. Simple RestAssured get request assertion by means of hamcrest assertThat ans \'is\'")
     void simpleApiGetHamcrestAssertThat() {
         step("set usersList as the result of the get response by RestAssured" +
                 "check usersList length is not null (hamcrest)", ()-> {
@@ -57,20 +58,28 @@ class RestApiTests extends TestBase {
     }
 
     @Test
+    @Description("3.1 Simple RestAssured get request no assertion just different way to build the request")
     void restAssuredNormalget() {
         RestAssured.baseURI = baseUrl;
         RequestSpecification httpRequest = given();
         Response response = httpRequest.request(Method.GET, "/api/users?page=2");
         System.out.println(response.getBody().asString());
     }
+
     @Test
+    @Description("4. Assert that returned result if 12 in one go, JSON parse by rest assured")
     void parseJsonFromApiGetSimplified() {
         RestAssured.baseURI = baseUrl;
+            given()
+            .log().all()
+            .filter(new AllureRestAssured());
         get("/api/users?page=2")
-                .then()
-                .body("total", is(12));
+            .then()
+            .body("total", is(12));
     }
+
     @Test
+    @Description("5. Std way to write rest-assured tests.")
     void parseJsonFromApiGetHamcrestAssert() {
         step("Initialize baseURI = " + baseUrl, ()->{
             RestAssured.baseURI = baseUrl;
@@ -78,6 +87,7 @@ class RestApiTests extends TestBase {
         step("Assign the results of REST API resuest to resultsTotal from JSON var total", ()-> {
             resultsTotal = given()
                     .filter(new AllureRestAssured())
+                    .log().all()
                     .when()
                     .get("/api/users?page=2")
                     .then()
@@ -90,11 +100,13 @@ class RestApiTests extends TestBase {
         });
     }
     @Test
+    @Description("6. Variation of 5. Assertion by hamcrest's \'is\'")
     void parseJsonFromApiGetRestAssrdOnly() {
         RestAssured.baseURI = baseUrl;
         step("hello", ()-> {
                 given()
                 .filter(new AllureRestAssured())
+                .log().all()
                 .when()
                 .get("/api/users?page=2")
                 .then()
@@ -103,18 +115,26 @@ class RestApiTests extends TestBase {
         });
     }
     @Test
+    @Description("7. Deeper parsing of response")
     void parseJsonParseJsonDeeper() {
         RestAssured.baseURI = baseUrl;
         step("hello", ()-> {
                 given()
-                .filter(new AllureRestAssured())
-                .when()
-                .get("/api/users?page=2")
+                    .log().all()
+                    .filter(new AllureRestAssured());
+            email = get("/api/users?page=2")
                 .then()
                 .statusCode(200)
-                .body("total", is(12));
+                .extract()
+                .response()
+                .path("data[2].email");
+        });
+        System.out.println("Email is;" + email);
+        step("email should be tobias.funke@reqres.in", ()-> {
+            assertThat(email, is("tobias.funke@reqres.in"));
         });
     }
+
 
 
 }
