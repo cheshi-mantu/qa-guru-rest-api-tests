@@ -176,10 +176,10 @@ class RestApiTests extends TestBase {
         });
     }
     @Test
-    @Description("10. Non existing user data check")
+    @Description("10. Non existing user data check. Expecting status 404 and null")
     void parseJsonUserDontExist() {
         RestAssured.baseURI = baseUrl;
-        step("Creating get request for single user \'/api/users/2\' ", ()-> {
+        step("Creating get request for single user \'/api/users/23\' ", ()-> {
             given()
                     .filter(new AllureRestAssured())
                     .log().all();
@@ -194,6 +194,17 @@ class RestApiTests extends TestBase {
         step("Returned first name should be NULL", ()-> {
             //assertThat(returnedValue, isEmptyOrNullString());
             assertThat(returnedValue, is(nullValue()));
+        });
+    }
+    @Test
+    @Description("11. Non existing user data check. Expecting status 404 and null. Simplified syntax.")
+    void parseJsonUserDontExistSimplified() {
+        RestAssured.baseURI = baseUrl;
+        step("Creating get request for single user \'/api/users/23\' ", ()-> {
+            get("/api/users/23")
+                .then()
+                .statusCode(404)
+                .body("data.first_name", is(nullValue()));
         });
     }
 
