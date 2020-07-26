@@ -62,11 +62,13 @@ class RestApiTests extends TestBase {
 
     @Test
     @Description("3.1 Simple RestAssured get request no assertion just different way to build the request")
-    void restAssuredNormalget() {
+    void restAssuredSimpleGet() {
+        step("Making simple get request and printing the BE response", ()->{
         RestAssured.baseURI = baseUrl;
         RequestSpecification httpRequest = given();
         Response response = httpRequest.request(Method.GET, "/api/users?page=2");
-        System.out.println(response.getBody().asString());
+        AttachmentsHelper.attachAsText("Backend response:", response.getBody().asString());
+        });
     }
 
     @Test
