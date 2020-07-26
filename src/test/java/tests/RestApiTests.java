@@ -1,5 +1,6 @@
 package tests;
 
+import helpers.AttachmentsHelper;
 import io.qameta.allure.Description;
 import io.qameta.allure.Epic;
 import io.qameta.allure.Feature;
@@ -28,6 +29,7 @@ class RestApiTests extends TestBase {
     String usersList;
     String email;
     String returnedValue;
+    String token;
 
     @Test
     @Description("1. Simple RestAssured get request and sending it to System.out. No assertion.")
@@ -205,6 +207,35 @@ class RestApiTests extends TestBase {
                 .then()
                 .statusCode(404)
                 .body("data.first_name", is(nullValue()));
+        });
+    }
+    @Test
+    @Description("11. POST login request. Successful attempt.")
+    void postSuccessfullLoginRequest() {
+//        {
+//            "email": "eve.holt@reqres.in",
+//                "password": "cityslicka"
+//        }
+        RestAssured.baseURI = baseUrl;
+        step("Preparing POST request to login to \'/api/login\' ", ()-> {
+            Response response =
+                given()
+                    .filter(new AllureRestAssured())
+                    .log().all()
+                    .contentType("application/json")
+                    .body("{\"email\": \"eve.holt@reqres.in\",\"password\": \"cityslicka\"}")
+                .when()
+                    .post("/api/login")
+                .then()
+                    .statusCode(200)
+                    .extract()
+                    .response();
+                token = response.path("token");
+        });
+        step("Asserting that received token is not null value", ()->{
+            assertThat(token, is(notNullValue()));
+            AttachmentsHelper.attachAsText("Returned token:", token);
+            System.out.println("Returned token: " + token);
         });
     }
 
