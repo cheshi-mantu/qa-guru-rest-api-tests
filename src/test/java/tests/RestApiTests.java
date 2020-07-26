@@ -74,13 +74,15 @@ class RestApiTests extends TestBase {
     @Test
     @Description("4. Assert that returned result if 12 in one go, JSON parse by rest assured")
     void parseJsonFromApiGetSimplified() {
-        RestAssured.baseURI = baseUrl;
+        step("Parsing answer's JSON, simplified", ()-> {
+            RestAssured.baseURI = baseUrl;
             given()
-            .log().all()
-            .filter(new AllureRestAssured());
-        get("/api/users?page=2")
-            .then()
-            .body("total", is(12));
+                    .filter(new AllureRestAssured())
+                    .log().all();
+            get("/api/users?page=2")
+                    .then()
+                    .body("total", is(12));
+        });
     }
 
     @Test
