@@ -41,7 +41,8 @@ class RestApiTests extends TestBase {
     @Description("1. Simple RestAssured get request and sending it to System.out. No assertion.")
     void simpleGetRestAssured() {
         step("get by RestAssured, print to the std system output", ()-> {
-            usersList = get(baseUrl + "/api/users?page=2").asString();
+            RestAssured.baseURI = baseUrl;
+            usersList = get("/api/users?page=2").asString();
             AttachmentsHelper.attachAsText("Server response: ", usersList);
             System.out.println(usersList);
         });
@@ -52,7 +53,8 @@ class RestApiTests extends TestBase {
     @Description("2. Simple RestAssured with assert by JUnit5 means usersList length > 0")
     void simpleApiGetJUnitAssertTrue() {
         step("get with rest assured, assert by JUnit5 with comments", ()-> {
-            usersList = get(baseUrl + "/api/users?page=2").asString();
+            RestAssured.baseURI = baseUrl;
+            usersList = get("/api/users?page=2").asString();
             assertTrue(usersList.length() > 0, "usersList length: " +
                     usersList.length() + " with data: " + usersList);
             AttachmentsHelper.attachAsText("Server response: ", usersList);
@@ -65,7 +67,8 @@ class RestApiTests extends TestBase {
     void simpleApiGetHamcrestAssertThat() {
         step("set usersList as the result of the get response by RestAssured" +
                 "check usersList length is not null (hamcrest)", ()-> {
-            usersList = get(baseUrl + "/api/users?page=2").asString();
+            RestAssured.baseURI = baseUrl;
+            usersList = get("/api/users?page=2").asString();
             assertThat(usersList.length(), is(not(nullValue())));
             AttachmentsHelper.attachAsText("Server response: ", usersList);
         });
@@ -320,7 +323,7 @@ class RestApiTests extends TestBase {
                     .config(config)
                     .contentType("application/json")
                     .when()
-                    .get(baseURI+"/api/users?delay=3")
+                    .get("/api/users?delay=3")
                     .then()
                     .statusCode(200)
                     .extract()
