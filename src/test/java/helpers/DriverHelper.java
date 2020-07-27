@@ -32,8 +32,4 @@ public class DriverHelper {
         return String.join("\n", Selenide.getWebDriverLogs(BROWSER));
     }
 
-//    public static String getNetworkLogs() {
-//        todo https://ru.selenide.org/2019/12/18/advent-calendar-network-logs-with-proxy/
-//    }
-
 }
