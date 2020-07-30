@@ -24,8 +24,8 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 @Epic("QA.GURU QA automation course")
 @Feature("Work with REST API")
 @Story("REST API tests with REST Assured")
-@Tag("rest_api_tests")
-class RestApiTests extends TestBase {
+@Tag("rest_api_tests_reqres")
+class ReqResInApiTests extends TestBase {
     private String baseUrl = "https://reqres.in";
     Integer resultsTotal;
     String usersList;
@@ -107,7 +107,7 @@ class RestApiTests extends TestBase {
         step("Initialize baseURI = " + baseUrl, ()->{
             RestAssured.baseURI = baseUrl;
         });
-        step("Assign the results of REST API resuest to resultsTotal from JSON var total", ()-> {
+        step("Assign the results of REST API request to resultsTotal from JSON var total", ()-> {
             resultsTotal = given()
                     .filter(new AllureRestAssured())
                     .log().all()
@@ -124,7 +124,7 @@ class RestApiTests extends TestBase {
     }
     @Test
     @DisplayName("6. Well formed rest-assured text. assert value selected by JSON path")
-    @Description("6. Variation of 5. Assertion by hamcrest's \'is\'")
+    @Description("6. Variation of 5. Assertion by hamcrest's 'is'")
     void parseJsonFromApiGetRestAssrdOnly() {
         RestAssured.baseURI = baseUrl;
         step("Build get request for group of users, getting the reponse. Assert.", ()-> {
@@ -188,7 +188,7 @@ class RestApiTests extends TestBase {
     @Description("9. Single User data check")
     void parseJsonForSingleUser() {
         RestAssured.baseURI = baseUrl;
-        step("Creating get request for single user \'/api/users/2\' ", ()-> {
+        step("Creating get request for single user '/api/users/2' ", ()-> {
             given()
                     .filter(new AllureRestAssured())
                     .log().all();
@@ -210,7 +210,7 @@ class RestApiTests extends TestBase {
     @Description("10. Non existing user data check. Expecting status 404 and null")
     void parseJsonUserDontExist() {
         RestAssured.baseURI = baseUrl;
-        step("Creating get request for single user \'/api/users/23\' ", ()-> {
+        step("Creating get request for single user '/api/users/23' ", ()-> {
             given()
                     .filter(new AllureRestAssured())
                     .log().all();
@@ -232,7 +232,7 @@ class RestApiTests extends TestBase {
     @Description("11. Non existing user data check. Expecting status 404 and null. Simplified syntax.")
     void parseJsonUserDontExistSimplified() {
         RestAssured.baseURI = baseUrl;
-        step("Creating get request for single user \'/api/users/23\' ", ()-> {
+        step("Creating get request for single user '/api/users/23' ", ()-> {
             get("/api/users/23")
                 .then()
                 .statusCode(404)
@@ -240,7 +240,7 @@ class RestApiTests extends TestBase {
         });
     }
     @Test
-    @DisplayName("12. POST request for authentication by email and passowrd")
+    @DisplayName("12. POST request for authentication by email and password")
     @Description("12. POST login request. Successful attempt. Check status code and token")
     void postSuccessfulLoginRequest() {
 //        {
@@ -248,7 +248,7 @@ class RestApiTests extends TestBase {
 //                "password": "cityslicka"
 //        }
         RestAssured.baseURI = baseUrl;
-        step("Preparing POST request to login to \'/api/login\' ", ()-> {
+        step("Preparing POST request to login to '/api/login' ", ()-> {
             Response response =
                 given()
                     .filter(new AllureRestAssured())
@@ -278,7 +278,7 @@ class RestApiTests extends TestBase {
 //                "password": "cityslicka" << will be missing in the request
 //        }
         RestAssured.baseURI = baseUrl;
-        step("Preparing POST request to login to \'/api/login\' ", ()-> {
+        step("Preparing POST request to login to '/api/login' ", ()-> {
             response =
                 given()
                     .filter(new AllureRestAssured())
@@ -296,7 +296,7 @@ class RestApiTests extends TestBase {
             errorText = response
                     .path("error");
         });
-        step("CHECK: error string is \'Missing password\'", ()-> {
+        step("CHECK: error string is 'Missing password'", ()-> {
             assertThat(errorText, is("Missing password"));
             AttachmentsHelper.attachAsText("Response from server: ",
                     response.statusCode() +" " + response.prettyPrint());

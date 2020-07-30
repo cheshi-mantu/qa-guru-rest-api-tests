@@ -1,6 +1,6 @@
 package helpers;
 
-import org.json.*;
+import org.json.JSONObject;
 
 import java.io.File;
 import java.io.IOException;
@@ -24,12 +24,10 @@ public class LoadCredentials {
         return new String(readBytesFromFile(filePath));
     }
 
-    public static ArrayList<String> getCredentialsFromJson(String filePath){
+    public static String getCredentialsFromJson(String filePath, String JsonKey){
         JSONObject jsonCredentials = new JSONObject(readStringFromFile(filePath));
-        ArrayList<String> readCredentials = new ArrayList<String>();
-
-        readCredentials.add(jsonCredentials.getString("name"));
-        readCredentials.add(jsonCredentials.getString("secret"));
+        String readCredentials;
+        readCredentials = jsonCredentials.getString(JsonKey);
 
         return readCredentials;
     }
