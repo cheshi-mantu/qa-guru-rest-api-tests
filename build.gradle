@@ -64,6 +64,10 @@ tasks.withType(JavaCompile) {
 task rest_api_tests(type: Test) {
     useJUnitPlatform {
         includeTags 'rest_api_tests_reqres'
+
+    }
+task rest_api_tests_weather(type: Test) {
+    useJUnitPlatform {
         includeTags 'rest_api_tests_weather'
 
     }
