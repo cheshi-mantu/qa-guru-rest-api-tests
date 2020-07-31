@@ -52,7 +52,7 @@ class OpenWeatherApiTests extends TestBase {
         });
         step("Assert response", ()->{
             assertThat(response.statusCode(), is(equalTo(200)));
-//            System.out.println(response.asString());
+            System.out.println(response.asString());
         });
     }
     @Test
@@ -61,7 +61,7 @@ class OpenWeatherApiTests extends TestBase {
     @Description("Sending formatted weather to Tlg chat and check server response ")
     void formatResponseAndSendToTlgChat() {
         RestAssured.baseURI = baseUrlTlg;
-        step("Create message for next test", ()->{
+        step("PRER Create message for next test", ()->{
             formattedMessage = "Город: " +  response.path("name") + "\n" +
                     "Погода:" + response.path("weather[0].description") + "\n" +
                     "Температура: " + response.path("main.temp") + "\n" +
@@ -75,7 +75,7 @@ class OpenWeatherApiTests extends TestBase {
             System.out.println("String to be sent:" + apiRequest);
         });
 
-        step("Build get request for group of users, getting the reponse. Assert the response", ()-> {
+        step("ACT & Assert: Send get and assert the response is 200", ()-> {
                 given()
                 .filter(new AllureRestAssured())
                 .log().all()
