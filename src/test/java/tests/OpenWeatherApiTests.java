@@ -49,10 +49,10 @@ class OpenWeatherApiTests extends TestBase {
                     .log().all()
                     .when()
                     .get(apiRequest);
+            System.out.println(response.asString());
         });
         step("Assert response", ()->{
             assertThat(response.statusCode(), is(equalTo(200)));
-            System.out.println(response.asString());
         });
     }
     @Test
