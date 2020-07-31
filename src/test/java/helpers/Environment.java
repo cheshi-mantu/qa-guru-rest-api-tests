@@ -6,11 +6,6 @@ public class Environment {
         weatherLang = System.getProperty("weather_lang","ru"),
         cityId = System.getProperty("city_id", "524901"),
         tlgBotIdAndSecret = System.getProperty("tlg_bot", null),
-        tlgChatId = System.getProperty("tlg_chat_id", null),
-        remoteDriverUrl = System.getProperty("remote_driver_url"),
-        videoStorageUrl = System.getProperty("video_storage_url");
-    public static boolean
-        isRemoteDriver = remoteDriverUrl != null,
-        isVideoOn = videoStorageUrl != null;
+        tlgChatId = System.getProperty("tlg_chat_id", null);
 }
 
