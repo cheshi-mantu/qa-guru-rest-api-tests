@@ -13,9 +13,12 @@ import org.junit.jupiter.api.*;
 
 import static helpers.Environment.*;
 import static io.qameta.allure.Allure.step;
+import static io.restassured.RestAssured.get;
 import static io.restassured.RestAssured.given;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
+import static helpers.LoadCredentials.getCredentialsFromJson;
+
 
 @Epic("QA.GURU QA automation course")
 @Feature("Work with REST API")
@@ -28,6 +31,7 @@ class OpenWeatherApiTests extends TestBase {
     private String baseUrlTlg = "https://api.telegram.org/";
     private String apiRequest;
     private String formattedMessage = "";
+
     Response response;
     @Test
     @Order(1)
@@ -37,11 +41,11 @@ class OpenWeatherApiTests extends TestBase {
         RestAssured.baseURI = baseUrlWeather;
 
         step("Checking System properties and setting vars", ()-> {
-        AttachmentsHelper.attachAsText("weatherApiKey: ", weatherApiKey);
+        AttachmentsHelper.attachAsText("weatherKey: ", weatherKey);
         });
 
         step("Building apiRequest string", ()->{
-            apiRequest = "?id=" + cityId + "&units=metric&lang=" + weatherLang + "&appid=" + weatherApiKey;
+            apiRequest = "?id=" + cityId + "&units=metric&lang=" + weatherLang + "&appid=" + weatherKey;
             AttachmentsHelper.attachAsText("apiRequest: ", apiRequest);
         });
 
@@ -65,8 +69,9 @@ class OpenWeatherApiTests extends TestBase {
     void formatResponseAndSendToTlgChat() {
         RestAssured.baseURI = baseUrlTlg;
         step("Checking System properties and setting for Telegram bot", ()-> {
-            AttachmentsHelper.attachAsText("Telegram bot data: ", tlgBotIdAndSecret);
-            AttachmentsHelper.attachAsText("Telegram chat data: ", tlgChatId);
+            AttachmentsHelper.attachAsText("Telegram bot data: ", tlgBot);
+            AttachmentsHelper.attachAsText("Telegram chat data: ", tlgChat);
+
         });
 
         step("PRER Create message for next test", ()->{
@@ -80,7 +85,7 @@ class OpenWeatherApiTests extends TestBase {
         });
 
         step("PREP: Build request params", ()->{
-            apiRequest = tlgBotIdAndSecret + "/sendMessage?chat_id=" + tlgChatId + "&text=" + formattedMessage;
+            apiRequest = tlgBot + "/sendMessage?chat_id=" + tlgChat + "&text=" + formattedMessage;
             AttachmentsHelper.attachAsText("API response: ", response.asString());
         });
 
