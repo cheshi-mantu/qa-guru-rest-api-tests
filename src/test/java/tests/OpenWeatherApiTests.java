@@ -33,26 +33,29 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 class OpenWeatherApiTests extends TestBase {
     private String baseUrlWeather = "http://api.openweathermap.org/data/2.5/weather?";
     private String baseUrlTlg = "https://api.telegram.org/";
+    private String apiRequest;
+    private String formattedMessage = "";
+    private String weatherKey, tlgBot, tlgChat;
     Response response;
-    String apiRequest;
-    String formattedMessage = "";
-    String weatherKey, tlgBot, tlgChat;
     @Test
     @Order(1)
     @DisplayName("Get current for given city")
     @Description("Get current weather, extract data from ")
     void parseJsonFromApiGetRestAssuredOnly() {
         RestAssured.baseURI = baseUrlWeather;
+
         step("Checking System properties and setting vars", ()-> {
             if (weatherApiKey == null) {
                 weatherKey = LoadCredentials.getCredentialsFromJson("ApiTests.secret", "weather_api_key");
             } else {
                 weatherKey = weatherApiKey;
             }
+            AttachmentsHelper.attachAsText("weatherKey:", weatherKey);
         });
 
         step("Building apiRequest string", ()->{
             apiRequest = "?id=" + cityId + "&units=metric&lang=" + weatherLang + "&appid=" + weatherKey;
+            AttachmentsHelper.attachAsText("apiRequest:", apiRequest);
             System.out.println("#### REQ: "+ apiRequest);
         });
 
@@ -63,6 +66,7 @@ class OpenWeatherApiTests extends TestBase {
                     .when()
                     .get(apiRequest);
             System.out.println("#### RESPONSE: "+ response.asString());
+            AttachmentsHelper.attachAsText("API response", response.asString());
         });
         step("Assert response", ()->{
             assertThat(response.statusCode(), is(equalTo(200)));
