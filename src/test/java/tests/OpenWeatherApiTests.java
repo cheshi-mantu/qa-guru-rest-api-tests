@@ -44,18 +44,13 @@ class OpenWeatherApiTests extends TestBase {
     void parseJsonFromApiGetRestAssuredOnly() {
         RestAssured.baseURI = baseUrlWeather;
 
-//        For local tests only
-//        step("Checking System properties and setting vars", ()-> {
-//            if (weatherApiKey == null) {
-//                weatherKey = LoadCredentials.getCredentialsFromJson("ApiTests.secret", "weather_api_key");
-//            } else {
-//                weatherKey = weatherApiKey;
-//            }
-//        });
-
         step("Checking System properties and setting vars", ()-> {
+            if (weatherApiKey == null) {
+                weatherKey = LoadCredentials.getCredentialsFromJson("ApiTests.secret", "weather_api_key");
+            } else {
                 weatherKey = weatherApiKey;
-                AttachmentsHelper.attachAsText("weatherKey: ", weatherKey);
+            }
+        AttachmentsHelper.attachAsText("weatherKey: ", weatherKey);
         });
 
         step("Building apiRequest string", ()->{
@@ -82,23 +77,17 @@ class OpenWeatherApiTests extends TestBase {
     @Description("Sending formatted weather to Tlg chat and check server response ")
     void formatResponseAndSendToTlgChat() {
         RestAssured.baseURI = baseUrlTlg;
-//        For local tests only
-//        step("Checking System properties and setting for Telegram bot", ()-> {
-//            if (tlgBotIdAndSecret == null) {
-//                tlgBot = LoadCredentials.getCredentialsFromJson("ApiTests.secret", "tlg_bot");
-//            } else {
-//                tlgBot = tlgBotIdAndSecret;
-//            }
-//            if (tlgChatId == null) {
-//                tlgChat = LoadCredentials.getCredentialsFromJson("ApiTests.secret", "tlg_chat_id");
-//            } else {
-//                tlgChat = tlgChatId;
-//            }
-//        });
-
         step("Checking System properties and setting for Telegram bot", ()-> {
-            tlgBot = tlgBotIdAndSecret;
-            tlgChat = tlgChatId;
+            if (tlgBotIdAndSecret == null) {
+                tlgBot = LoadCredentials.getCredentialsFromJson("ApiTests.secret", "tlg_bot");
+            } else {
+                tlgBot = tlgBotIdAndSecret;
+            }
+            if (tlgChatId == null) {
+                tlgChat = LoadCredentials.getCredentialsFromJson("ApiTests.secret", "tlg_chat_id");
+            } else {
+                tlgChat = tlgChatId;
+            }
             AttachmentsHelper.attachAsText("Telegram bot data: ", tlgBot);
             AttachmentsHelper.attachAsText("Telegram chat data: ", tlgChat);
         });
