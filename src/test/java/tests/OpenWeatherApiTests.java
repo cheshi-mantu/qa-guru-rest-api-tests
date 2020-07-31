@@ -1,6 +1,7 @@
 package tests;
 
 import helpers.AttachmentsHelper;
+import helpers.LoadCredentials;
 import io.qameta.allure.Description;
 import io.qameta.allure.Epic;
 import io.qameta.allure.Feature;
@@ -35,14 +36,26 @@ class OpenWeatherApiTests extends TestBase {
     Response response;
     String apiRequest;
     String formattedMessage = "";
+    String weatherKey, tlgBot, tlgChat;
     @Test
     @Order(1)
     @DisplayName("Get current for given city")
     @Description("Get current weather, extract data from ")
     void parseJsonFromApiGetRestAssuredOnly() {
         RestAssured.baseURI = baseUrlWeather;
-        apiRequest = "?id=" + cityId + "&units=metric&lang=" + weatherLang + "&appid=" + weatherApiKey;
-        System.out.println("#### REQ: "+ apiRequest);
+        step("Checking System properties and setting vars", ()-> {
+            if (weatherApiKey == null) {
+                weatherKey = LoadCredentials.getCredentialsFromJson("ApiTests.secret", "weather_api_key");
+            } else {
+                weatherKey = weatherApiKey;
+            }
+        });
+
+        step("Building apiRequest string", ()->{
+            apiRequest = "?id=" + cityId + "&units=metric&lang=" + weatherLang + "&appid=" + weatherKey;
+            System.out.println("#### REQ: "+ apiRequest);
+        });
+
         step("Build get request for group of users, getting the reponse. Assert the response", ()-> {
             response = given()
                     .filter(new AllureRestAssured())
@@ -55,12 +68,27 @@ class OpenWeatherApiTests extends TestBase {
             assertThat(response.statusCode(), is(equalTo(200)));
         });
     }
+
     @Test
     @Order(2)
     @DisplayName("Send Weather data via Tlg bot to chat")
     @Description("Sending formatted weather to Tlg chat and check server response ")
     void formatResponseAndSendToTlgChat() {
         RestAssured.baseURI = baseUrlTlg;
+
+        step("Checking System properties and setting for Telegram bot", ()-> {
+            if (tlgBotIdAndSecret == null) {
+                tlgBot = LoadCredentials.getCredentialsFromJson("ApiTests.secret", "tlg_bot");
+            } else {
+                tlgBot = tlgBotIdAndSecret;
+            }
+            if (tlgChatId == null) {
+                tlgChat = LoadCredentials.getCredentialsFromJson("ApiTests.secret", "tlg_chat_id");
+            } else {
+                tlgChat = tlgChatId;
+            }
+        });
+
         step("PRER Create message for next test", ()->{
             formattedMessage = "Город: " +  response.path("name") + "\n" +
                     "Погода:" + response.path("weather[0].description") + "\n" +
@@ -71,7 +99,7 @@ class OpenWeatherApiTests extends TestBase {
         });
 
         step("PREP: Build request params", ()->{
-            apiRequest = tlgBotIdAndSecret + "/sendMessage?chat_id=" + tlgChatlId + "&text=" + formattedMessage;
+            apiRequest = tlgBot + "/sendMessage?chat_id=" + tlgChat + "&text=" + formattedMessage;
             System.out.println("String to be sent:" + apiRequest);
         });
 
