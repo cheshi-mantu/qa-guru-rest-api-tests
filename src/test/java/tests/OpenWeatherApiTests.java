@@ -8,21 +8,14 @@ import io.qameta.allure.Feature;
 import io.qameta.allure.Story;
 import io.qameta.allure.restassured.AllureRestAssured;
 import io.restassured.RestAssured;
-import io.restassured.config.HttpClientConfig;
-import io.restassured.config.RestAssuredConfig;
-import io.restassured.http.Method;
 import io.restassured.response.Response;
-import io.restassured.specification.RequestSpecification;
-import org.apache.http.params.CoreConnectionPNames;
 import org.junit.jupiter.api.*;
 
 import static helpers.Environment.*;
 import static io.qameta.allure.Allure.step;
-import static io.restassured.RestAssured.get;
 import static io.restassured.RestAssured.given;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @Epic("QA.GURU QA automation course")
 @Feature("Work with REST API")
@@ -35,7 +28,6 @@ class OpenWeatherApiTests extends TestBase {
     private String baseUrlTlg = "https://api.telegram.org/";
     private String apiRequest;
     private String formattedMessage = "";
-    private String weatherKey, tlgBot, tlgChat;
     Response response;
     @Test
     @Order(1)
@@ -45,16 +37,11 @@ class OpenWeatherApiTests extends TestBase {
         RestAssured.baseURI = baseUrlWeather;
 
         step("Checking System properties and setting vars", ()-> {
-            if (weatherApiKey == null) {
-                weatherKey = LoadCredentials.getCredentialsFromJson("ApiTests.secret", "weather_api_key");
-            } else {
-                weatherKey = weatherApiKey;
-            }
-        AttachmentsHelper.attachAsText("weatherKey: ", weatherKey);
+        AttachmentsHelper.attachAsText("weatherApiKey: ", weatherApiKey);
         });
 
         step("Building apiRequest string", ()->{
-            apiRequest = "?id=" + cityId + "&units=metric&lang=" + weatherLang + "&appid=" + weatherKey;
+            apiRequest = "?id=" + cityId + "&units=metric&lang=" + weatherLang + "&appid=" + weatherApiKey;
             AttachmentsHelper.attachAsText("apiRequest: ", apiRequest);
         });
 
@@ -78,18 +65,8 @@ class OpenWeatherApiTests extends TestBase {
     void formatResponseAndSendToTlgChat() {
         RestAssured.baseURI = baseUrlTlg;
         step("Checking System properties and setting for Telegram bot", ()-> {
-            if (tlgBotIdAndSecret == null) {
-                tlgBot = LoadCredentials.getCredentialsFromJson("ApiTests.secret", "tlg_bot");
-            } else {
-                tlgBot = tlgBotIdAndSecret;
-            }
-            if (tlgChatId == null) {
-                tlgChat = LoadCredentials.getCredentialsFromJson("ApiTests.secret", "tlg_chat_id");
-            } else {
-                tlgChat = tlgChatId;
-            }
-            AttachmentsHelper.attachAsText("Telegram bot data: ", tlgBot);
-            AttachmentsHelper.attachAsText("Telegram chat data: ", tlgChat);
+            AttachmentsHelper.attachAsText("Telegram bot data: ", tlgBotIdAndSecret);
+            AttachmentsHelper.attachAsText("Telegram chat data: ", tlgChatId);
         });
 
         step("PRER Create message for next test", ()->{
@@ -103,7 +80,7 @@ class OpenWeatherApiTests extends TestBase {
         });
 
         step("PREP: Build request params", ()->{
-            apiRequest = tlgBot + "/sendMessage?chat_id=" + tlgChat + "&text=" + formattedMessage;
+            apiRequest = tlgBotIdAndSecret + "/sendMessage?chat_id=" + tlgChatId + "&text=" + formattedMessage;
             AttachmentsHelper.attachAsText("API response: ", response.asString());
         });
 
