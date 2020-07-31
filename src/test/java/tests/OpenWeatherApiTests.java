@@ -44,19 +44,23 @@ class OpenWeatherApiTests extends TestBase {
     void parseJsonFromApiGetRestAssuredOnly() {
         RestAssured.baseURI = baseUrlWeather;
 
+//        For local tests only
+//        step("Checking System properties and setting vars", ()-> {
+//            if (weatherApiKey == null) {
+//                weatherKey = LoadCredentials.getCredentialsFromJson("ApiTests.secret", "weather_api_key");
+//            } else {
+//                weatherKey = weatherApiKey;
+//            }
+//        });
+
         step("Checking System properties and setting vars", ()-> {
-            if (weatherApiKey == null) {
-                weatherKey = LoadCredentials.getCredentialsFromJson("ApiTests.secret", "weather_api_key");
-            } else {
                 weatherKey = weatherApiKey;
-            }
-            AttachmentsHelper.attachAsText("weatherKey:", weatherKey);
+                AttachmentsHelper.attachAsText("weatherKey: ", weatherKey);
         });
 
         step("Building apiRequest string", ()->{
             apiRequest = "?id=" + cityId + "&units=metric&lang=" + weatherLang + "&appid=" + weatherKey;
-            AttachmentsHelper.attachAsText("apiRequest:", apiRequest);
-            System.out.println("#### REQ: "+ apiRequest);
+            AttachmentsHelper.attachAsText("apiRequest: ", apiRequest);
         });
 
         step("Build get request for group of users, getting the reponse. Assert the response", ()-> {
@@ -65,8 +69,7 @@ class OpenWeatherApiTests extends TestBase {
                     .log().all()
                     .when()
                     .get(apiRequest);
-            System.out.println("#### RESPONSE: "+ response.asString());
-            AttachmentsHelper.attachAsText("API response", response.asString());
+            AttachmentsHelper.attachAsText("API response: ", response.asString());
         });
         step("Assert response", ()->{
             assertThat(response.statusCode(), is(equalTo(200)));
@@ -79,18 +82,25 @@ class OpenWeatherApiTests extends TestBase {
     @Description("Sending formatted weather to Tlg chat and check server response ")
     void formatResponseAndSendToTlgChat() {
         RestAssured.baseURI = baseUrlTlg;
+//        For local tests only
+//        step("Checking System properties and setting for Telegram bot", ()-> {
+//            if (tlgBotIdAndSecret == null) {
+//                tlgBot = LoadCredentials.getCredentialsFromJson("ApiTests.secret", "tlg_bot");
+//            } else {
+//                tlgBot = tlgBotIdAndSecret;
+//            }
+//            if (tlgChatId == null) {
+//                tlgChat = LoadCredentials.getCredentialsFromJson("ApiTests.secret", "tlg_chat_id");
+//            } else {
+//                tlgChat = tlgChatId;
+//            }
+//        });
 
         step("Checking System properties and setting for Telegram bot", ()-> {
-            if (tlgBotIdAndSecret == null) {
-                tlgBot = LoadCredentials.getCredentialsFromJson("ApiTests.secret", "tlg_bot");
-            } else {
-                tlgBot = tlgBotIdAndSecret;
-            }
-            if (tlgChatId == null) {
-                tlgChat = LoadCredentials.getCredentialsFromJson("ApiTests.secret", "tlg_chat_id");
-            } else {
-                tlgChat = tlgChatId;
-            }
+            tlgBot = tlgBotIdAndSecret;
+            tlgChat = tlgChatId;
+            AttachmentsHelper.attachAsText("Telegram bot data: ", tlgBot);
+            AttachmentsHelper.attachAsText("Telegram chat data: ", tlgChat);
         });
 
         step("PRER Create message for next test", ()->{
@@ -100,11 +110,12 @@ class OpenWeatherApiTests extends TestBase {
                     "Ощущается: " + response.path("main.feels_like") + "\n" +
                     "Давление: " + response.path("main.pressure") + "\n" +
                     "Ветер: " + response.path("wind.speed") + " м/с " + response.path("wind.deg");
+            AttachmentsHelper.attachAsText("Message to send: ", formattedMessage);
         });
 
         step("PREP: Build request params", ()->{
             apiRequest = tlgBot + "/sendMessage?chat_id=" + tlgChat + "&text=" + formattedMessage;
-            System.out.println("String to be sent:" + apiRequest);
+            AttachmentsHelper.attachAsText("API response: ", response.asString());
         });
 
         step("ACT & Assert: Send get and assert the response is 200", ()-> {
