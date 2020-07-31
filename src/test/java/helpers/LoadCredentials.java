@@ -10,7 +10,7 @@ import java.util.ArrayList;
 
 public class LoadCredentials {
 
-    public static byte[] readBytesFromFile(String filePath) {
+    public static byte[] readBytesFromFile(String filePath) throws Exception {
         File file = new File(filePath);
         try {
             return Files.readAllBytes(Paths.get(file.getAbsolutePath()));
