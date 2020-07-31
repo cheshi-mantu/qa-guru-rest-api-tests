@@ -42,14 +42,14 @@ class OpenWeatherApiTests extends TestBase {
     void parseJsonFromApiGetRestAssuredOnly() {
         RestAssured.baseURI = baseUrlWeather;
         apiRequest = "?id=" + cityId + "&units=metric&lang=" + weatherLang + "&appid=" + weatherApiKey;
-
+        System.out.println("#### REQ: "+ apiRequest);
         step("Build get request for group of users, getting the reponse. Assert the response", ()-> {
             response = given()
                     .filter(new AllureRestAssured())
                     .log().all()
                     .when()
                     .get(apiRequest);
-            System.out.println(response.asString());
+            System.out.println("#### RESPONSE: "+ response.asString());
         });
         step("Assert response", ()->{
             assertThat(response.statusCode(), is(equalTo(200)));
