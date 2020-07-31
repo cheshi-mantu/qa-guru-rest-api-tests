@@ -13,11 +13,9 @@ import org.junit.jupiter.api.*;
 
 import static helpers.Environment.*;
 import static io.qameta.allure.Allure.step;
-import static io.restassured.RestAssured.get;
 import static io.restassured.RestAssured.given;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
-import static helpers.LoadCredentials.getCredentialsFromJson;
 
 
 @Epic("QA.GURU QA automation course")
