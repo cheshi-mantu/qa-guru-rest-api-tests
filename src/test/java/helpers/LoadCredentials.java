@@ -3,7 +3,7 @@ package helpers;
 import org.json.JSONObject;
 
 import java.io.File;
-import java.io.IOException;
+import java.io.FileNotFoundException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 
@@ -13,7 +13,7 @@ public class LoadCredentials {
         File file = new File(filePath);
         try {
             return Files.readAllBytes(Paths.get(file.getAbsolutePath()));
-        } catch (IOException e) {
+        } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
         return new byte[]{};
