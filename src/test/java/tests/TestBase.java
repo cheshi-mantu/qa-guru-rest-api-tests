@@ -1,6 +1,7 @@
 package tests;
 
 
+import helpers.AttachmentsHelper;
 import org.junit.jupiter.api.BeforeAll;
 
 import static helpers.Environment.*;
@@ -14,22 +15,25 @@ public class TestBase {
     @BeforeAll
     public static void setUp(){
 
-        if (weatherApiKey == null) {
-            weatherKey = getCredentialsFromJson("ApiTests.secret", "weather_api_key");
-        } else {
+        if (weatherApiKey != null) {
             weatherKey = weatherApiKey;
-        }
-        if (tlgBotIdAndSecret == null) {
-            tlgBot = getCredentialsFromJson("ApiTests.secret", "tlg_bot");
         } else {
+            weatherKey = getCredentialsFromJson("ApiTests.secret", "weather_api_key");
+        }
+
+        if (tlgBotIdAndSecret != null) {
             tlgBot = tlgBotIdAndSecret;
-        }
-        if (tlgChatId == null) {
-            tlgChat = getCredentialsFromJson("ApiTests.secret", "tlg_chat_id");
         } else {
-            tlgChat = tlgChatId;
+            tlgBot = getCredentialsFromJson("ApiTests.secret", "tlg_bot");
         }
 
-
+        if (tlgChatId != null) {
+            tlgChat = tlgChatId;
+        } else {
+            tlgChat = getCredentialsFromJson("ApiTests.secret", "tlg_chat_id");
+        }
+        AttachmentsHelper.attachAsText("Weather key: ", weatherKey);
+        AttachmentsHelper.attachAsText("Weather key: ", tlgBot);
+        AttachmentsHelper.attachAsText("Weather key: ", tlgChat);
     }
 }
