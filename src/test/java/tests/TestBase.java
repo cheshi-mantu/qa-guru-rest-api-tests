@@ -4,7 +4,6 @@ package tests;
 import org.junit.jupiter.api.BeforeAll;
 
 import static helpers.Environment.*;
-import static helpers.Environment.tlgChatId;
 import static helpers.LoadCredentials.getCredentialsFromJson;
 
 public class TestBase {
