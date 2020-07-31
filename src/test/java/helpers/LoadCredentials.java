@@ -20,11 +20,11 @@ public class LoadCredentials {
         return new byte[]{};
     }
 
-    public static String readStringFromFile(String filePath) {
+    public static String readStringFromFile(String filePath) throws Exception {
         return new String(readBytesFromFile(filePath));
     }
 
-    public static String getCredentialsFromJson(String filePath, String JsonKey){
+    public static String getCredentialsFromJson(String filePath, String JsonKey) throws Exception {
         JSONObject jsonCredentials = new JSONObject(readStringFromFile(filePath));
         String readCredentials;
         readCredentials = jsonCredentials.getString(JsonKey);
