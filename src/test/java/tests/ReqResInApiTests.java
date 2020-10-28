@@ -63,7 +63,7 @@ class ReqResInApiTests extends TestBase {
 
     @Test
     @DisplayName("3. Using hamcrest assertThat to assert response size.")
-    @Description("3. Simple RestAssured get request assertion by means of hamcrest assertThat ans \'is\'")
+    @Description("3. Simple RestAssured get request assertion by means of hamcrest assertThat ans 'is'")
     void simpleApiGetHamcrestAssertThat() {
         step("set usersList as the result of the get response by RestAssured" +
                 "check usersList length is not null (hamcrest)", ()-> {
@@ -88,7 +88,7 @@ class ReqResInApiTests extends TestBase {
     }
 
     @Test
-    @DisplayName("4. Using hamcrest \'is\' to assert response value.")
+    @DisplayName("4. Using hamcrest 'is' to assert response value.")
     @Description("4. Assert that returned result if 12 in one go, JSON parse by rest assured")
     void parseJsonFromApiGetSimplified() {
         RestAssured.baseURI = baseUrl;
@@ -206,7 +206,7 @@ class ReqResInApiTests extends TestBase {
         });
     }
     @Test
-    @DisplayName("10. Requst missing user with id = 23. 404 to be returned")
+    @DisplayName("10. Request missing user with id = 23. 404 to be returned")
     @Description("10. Non existing user data check. Expecting status 404 and null")
     void parseJsonUserDontExist() {
         RestAssured.baseURI = baseUrl;
