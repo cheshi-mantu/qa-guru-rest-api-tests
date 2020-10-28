@@ -305,7 +305,7 @@ class ReqResInApiTests extends TestBase {
     }
     @Test
     @DisplayName("14. Processing response timeouts")
-    @Description("14. POST login request. Unsuccessful attempt du to password absence.")
+    @Description("14. Processing response timeouts")
     void restAssuredDelaysProcessing() {
         step("PREP: setting baseURI", ()-> {
             RestAssured.baseURI = baseUrl;
