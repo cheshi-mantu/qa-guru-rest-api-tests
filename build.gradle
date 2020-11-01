@@ -70,3 +70,8 @@ task rest_api_tests(type: Test) {
         includeTags 'rest_api_tests_weather'
     }
 }
+task rest_api_tests_reqres(type: Test) {
+    useJUnitPlatform {
+        includeTags 'rest_api_tests_reqres'
+    }
+}
