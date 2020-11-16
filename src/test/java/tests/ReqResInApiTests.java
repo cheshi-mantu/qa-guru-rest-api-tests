@@ -179,7 +179,7 @@ class ReqResInApiTests extends TestBase {
         });
         System.out.println("Response value from BE:" + returnedValue);
         step("Should be StatusCode Wekly", ()-> {
-            assertThat(returnedValue, is("StatusCode Weekly"));
+            assertThat(returnedValue, is("Squarespace"));
             AttachmentsHelper.attachAsText("JSON Parsing result: ", returnedValue);
         });
     }
