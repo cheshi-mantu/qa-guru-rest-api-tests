@@ -175,11 +175,11 @@ class ReqResInApiTests extends TestBase {
                         .statusCode(200)
                         .extract()
                         .response()
-                        .path("ad.company");
+                        .path("support.url");
         });
         System.out.println("Response value from BE:" + returnedValue);
         step("Should be StatusCode Wekly", ()-> {
-            assertThat(returnedValue, is("Squarespace"));
+            assertThat(returnedValue, containsString("#support-heading"));
             AttachmentsHelper.attachAsText("JSON Parsing result: ", returnedValue);
         });
     }
