@@ -74,7 +74,7 @@ class OpenWeatherApiTests extends TestBase {
 
         step("PRER Create message for next test", ()->{
             formattedMessage = "Город: " +  response.path("name") + "\n" +
-                    "Погода:" + response.path("weather[0].description") + "\n" +
+                    "Погода: " + response.path("weather[0].description") + "\n" +
                     "Температура: " + response.path("main.temp") + "\n" +
                     "Ощущается: " + response.path("main.feels_like") + "\n" +
                     "Давление: " + response.path("main.pressure") + "\n" +
