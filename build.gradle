@@ -65,7 +65,6 @@ tasks.withType(JavaCompile) {
     options.encoding = 'UTF-8'
 }
 
-//this is added to pass the system properties received from the command line when invoking gradle with tests
 tasks.withType(Test) {
     systemProperties = System.properties
 }
@@ -79,5 +78,10 @@ task rest_api_tests(type: Test) {
 task rest_api_tests_reqres(type: Test) {
     useJUnitPlatform {
         includeTags 'rest_api_tests_reqres'
+    }
+}
+task rest_api_tests_weather(type: Test) {
+    useJUnitPlatform {
+        includeTags 'rest_api_tests_weather'
     }
 }
