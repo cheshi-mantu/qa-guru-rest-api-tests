@@ -59,8 +59,10 @@ dependencies {
     testImplementation "org.json:json:${orgJsonVersion}"
     testImplementation 'org.hamcrest:hamcrest-all:1.3'
     testImplementation "org.slf4j:slf4j-simple:${slfjVersion}"
-    testImplementation("org.junit.jupiter:junit-jupiter-api:${junitVersion}")
-    testImplementation("org.junit.jupiter:junit-jupiter-engine:${junitVersion}")
+    testImplementation "org.junit.jupiter:junit-jupiter-api:${junitVersion}"
+    testImplementation "org.junit.jupiter:junit-jupiter-engine:${junitVersion}"
+    testImplementation "org.junit.platform:junit-platform-launcher:${junitVersion}"
+
 }
 
 tasks.withType(JavaCompile) {
