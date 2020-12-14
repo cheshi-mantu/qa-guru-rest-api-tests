@@ -52,6 +52,8 @@ allure {
 dependencies {
     testImplementation "org.aspectj:aspectjweaver:${orgAspectjVersion}"
     testImplementation "io.qameta.allure:allure-rest-assured:${allureVersion}"
+    testImplementation "io.qameta.allure:allure-junit-platform:${allureVersion}"
+    testImplementation "io.qameta.allure:allure-junit5:${allureVersion}"
     testImplementation "io.rest-assured:rest-assured:${restAssuredVersion}"
     testImplementation 'ch.qos.logback:logback-classic:1.2.3'
     testImplementation "org.json:json:${orgJsonVersion}"
