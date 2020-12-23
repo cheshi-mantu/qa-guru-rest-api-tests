@@ -38,9 +38,9 @@ class OpenWeatherApiTests extends TestBase {
     void parseJsonFromApiGetRestAssuredOnly() {
         RestAssured.baseURI = baseUrlWeather;
 
-        step("Checking System properties and setting vars", ()-> {
-        AttachmentsHelper.attachAsText("weatherKey: ", weatherKey);
-        });
+//        step("Send API key to the test log as attachment", ()-> {
+//        AttachmentsHelper.attachAsText("weatherKey: ", weatherKey);
+//        });
 
         step("Building apiRequest string", ()->{
             apiRequest = "?id=" + cityId + "&units=metric&lang=" + weatherLang + "&appid=" + weatherKey;
@@ -66,11 +66,11 @@ class OpenWeatherApiTests extends TestBase {
     @Description("Sending formatted weather to Tlg chat and check server response ")
     void formatResponseAndSendToTlgChat() {
         RestAssured.baseURI = baseUrlTlg;
-        step("Checking System properties and setting for Telegram bot", ()-> {
-            AttachmentsHelper.attachAsText("Telegram bot data: ", tlgBot);
-            AttachmentsHelper.attachAsText("Telegram chat data: ", tlgChat);
-
-        });
+//        step("Sending request data as attach to the test results", ()-> {
+//            AttachmentsHelper.attachAsText("Telegram bot data: ", tlgBot);
+//            AttachmentsHelper.attachAsText("Telegram chat data: ", tlgChat);
+//
+//        });
 
         step("PRER Create message for next test", ()->{
             formattedMessage = "Город: " +  response.path("name") + "\n" +
