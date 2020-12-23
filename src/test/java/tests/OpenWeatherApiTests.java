@@ -72,7 +72,7 @@ class OpenWeatherApiTests extends TestBase {
 //
 //        });
 
-        step("PRER Create message for next test", ()->{
+        step("PREP: Create message for next test", ()->{
             formattedMessage = "Город: " +  response.path("name") + "\n" +
                     "Погода: " + response.path("weather[0].description") + "\n" +
                     "Температура: " + response.path("main.temp") + "\n" +
@@ -82,12 +82,12 @@ class OpenWeatherApiTests extends TestBase {
             AttachmentsHelper.attachAsText("Message to send: ", formattedMessage);
         });
 
-        step("PREP: Build request params", ()->{
+        step("PREP: Build request params for tlg bot", ()->{
             apiRequest = tlgBot + "/sendMessage?chat_id=" + tlgChat + "&text=" + formattedMessage;
             AttachmentsHelper.attachAsText("API response: ", response.asString());
         });
 
-        step("ACT & Assert: Send get and assert the response is 200", ()-> {
+        step("ACT & Assert: send get and assert the response is 200", ()-> {
                 given()
                 .filter(new AllureRestAssured())
                 .log().all()
@@ -99,4 +99,4 @@ class OpenWeatherApiTests extends TestBase {
     }
 
 }
-
+//TODO: create same test to ge Fx rate for USD from cbr.ru
