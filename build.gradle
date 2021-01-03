@@ -27,7 +27,7 @@ ext {
     allureVersion = '2.13.7'
     junitVersion = '5.7.0'
     selenideVersion = "5.16.2"
-    restAssuredVersion = "4.3.2"
+    restAssuredVersion = "4.3.3"
     orgJsonVersion = "20201115"
     orgAspectjVersion = "1.9.6"
     slfjVersion = "1.7.30"
@@ -58,6 +58,7 @@ dependencies {
     testImplementation "io.qameta.allure:allure-ee-junit-platform:3.28.2"
 
     testImplementation "io.rest-assured:rest-assured:${restAssuredVersion}"
+    testImplementation "io.rest-assured:xml-path:${restAssuredVersion}"
 
     testImplementation 'ch.qos.logback:logback-classic:1.2.3'
     testImplementation "org.json:json:${orgJsonVersion}"
@@ -79,6 +80,22 @@ tasks.withType(JavaCompile) {
 tasks.withType(Test) {
     systemProperties = System.properties
     systemProperty("junit.jupiter.extensions.autodetection.enabled", "true") // to run allure testops selective tasks
+    testLogging {
+
+        // set options for log level LIFECYCLE
+        events "failed",
+//                "started",
+//                "passed",
+//                "skipped",
+                "standard_out",
+                "standard_error"
+        exceptionFormat "full"
+        showExceptions true
+        showCauses true
+        showStackTraces true
+//        showStandardStreams true
+    }
+
 }
 
 task rest_api_tests(type: Test) {
@@ -95,5 +112,10 @@ task rest_api_tests_reqres(type: Test) {
 task rest_api_tests_weather(type: Test) {
     useJUnitPlatform {
         includeTags 'rest_api_tests_weather'
+    }
+}
+task rest_api_tests_fx(type: Test) {
+    useJUnitPlatform {
+        includeTags 'rest_api_tests_fx'
     }
 }
