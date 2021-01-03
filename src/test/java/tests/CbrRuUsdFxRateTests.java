@@ -12,7 +12,7 @@ import io.restassured.path.xml.XmlPath;
 import io.restassured.response.Response;
 import org.junit.jupiter.api.*;
 
-import static helpers.Environment.*;
+import static helpers.GetDate.getTodaysDate;
 import static io.qameta.allure.Allure.step;
 import static io.restassured.RestAssured.*;
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -25,21 +25,24 @@ import static org.hamcrest.Matchers.*;
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class CbrRuUsdFxRateTests extends TestBase {
-    private String baseUrlCbr = "http://www.cbr.ru/scripts/XML_daily.asp?date_req=25/12/2020";
-//    private String baseUrlTlg = "https://api.telegram.org/";
+    private String baseUrlCbr = "http://www.cbr.ru/scripts/XML_daily.asp?date_req=";
+    private String baseUrlTlg = "https://api.telegram.org/";
+    private String apiReqPath;
     private String apiRequest;
-//    private String formattedMessage = "";
+    private String formattedMessage = "";
 
     Response response;
+
     @Test
     @Order(1)
     @DisplayName("Get USD FX rate from CBR for the given date")
     @Description("Send get request, check the response status is 200, parse the response, extract USD rate")
     void parseJsonFromApiGetRestAssuredOnly() {
         RestAssured.baseURI = baseUrlCbr;
+        apiReqPath = getTodaysDate();
 
         step("Building apiRequest string", ()->{
-            apiRequest = baseUrlCbr;
+            apiRequest = baseUrlCbr + apiReqPath;
             AttachmentsHelper.attachAsText("apiRequest: ", apiRequest);
             registerParser("application/xml", Parser.XML);
         });
@@ -53,7 +56,7 @@ class CbrRuUsdFxRateTests extends TestBase {
                     .then()
                     .contentType(ContentType.XML)
                     .extract().response();
-            AttachmentsHelper.attachAsText("API response: ", response.asString());
+            AttachmentsHelper.attachAsText("API response: ", response.prettyPrint());
         });
         step("Assert response", ()->{
             assertThat(response.statusCode(), is(equalTo(200)));
@@ -61,51 +64,42 @@ class CbrRuUsdFxRateTests extends TestBase {
 
         step("Assert response", ()->{
             XmlPath xmlpath = new XmlPath(response.asString());
-//            XmlPath xmlpath = new XmlPath(response.asString()).setRootPath("ValCurs");
-            String charCode = xmlpath.get("ValCurs.Valute.find { it.CharCode == 'USD' }.Value");
-            System.out.println("RESPONSE: " + charCode);
-//            System.out.println("RESPONSE: " + xmlpath.prettyPrint());
-
+            String charCodeValue = xmlpath.get("ValCurs.Valute.find { it.CharCode == 'USD' }.Value");
+            System.out.println("RESPONSE: " + charCodeValue);
+            formattedMessage = "USD FX rate for "+ apiReqPath + " " + charCodeValue;
+            AttachmentsHelper.attachAsText("Returned USD FX rate: ", charCodeValue);
         });
     }
 
-//    @Test
-//    @Order(2)
-//    @DisplayName("Send Weather data via Tlg bot to chat")
-//    @Description("Sending formatted weather to Tlg chat and check server response ")
-//    void formatResponseAndSendToTlgChat() {
-//        RestAssured.baseURI = baseUrlTlg;
-////        step("Sending request data as attach to the test results", ()-> {
-////            AttachmentsHelper.attachAsText("Telegram bot data: ", tlgBot);
-////            AttachmentsHelper.attachAsText("Telegram chat data: ", tlgChat);
-////
-////        });
+    @Test
+    @Order(2)
+    @DisplayName("Send Weather data via Tlg bot to chat")
+    @Description("Sending formatted weather to Tlg chat and check server response ")
+    void formatResponseAndSendToTlgChat() {
+        RestAssured.baseURI = baseUrlTlg;
+//        step("Sending request data as attach to the test results", ()-> {
+//            AttachmentsHelper.attachAsText("Telegram bot data: ", tlgBot);
+//            AttachmentsHelper.attachAsText("Telegram chat data: ", tlgChat);
 //
-//        step("PREP: Create message for next test", ()->{
-//            formattedMessage = "Город: " +  response.path("name") + "\n" +
-//                    "Погода: " + response.path("weather[0].description") + "\n" +
-//                    "Температура: " + response.path("main.temp") + "\n" +
-//                    "Ощущается: " + response.path("main.feels_like") + "\n" +
-//                    "Давление: " + response.path("main.pressure") + "\n" +
-//                    "Ветер: " + response.path("wind.speed") + " м/с " + response.path("wind.deg");
-//            AttachmentsHelper.attachAsText("Message to send: ", formattedMessage);
 //        });
-//
-//        step("PREP: Build request params for tlg bot", ()->{
-//            apiRequest = tlgBot + "/sendMessage?chat_id=" + tlgChat + "&text=" + formattedMessage;
-//            AttachmentsHelper.attachAsText("API response: ", response.asString());
-//        });
-//
-//        step("ACT & Assert: send get and assert the response is 200", ()-> {
-//            given()
-//                    .filter(new AllureRestAssured())
-//                    .log().all()
-//                    .when()
-//                    .get(apiRequest)
-//                    .then()
-//                    .statusCode(200);
-//        });
-//    }
+        step("PREP: Create message for next test", ()->{
+            AttachmentsHelper.attachAsText("Message to send: ", formattedMessage);
+        });
+
+        step("PREP: Build request params for tlg bot", ()->{
+            apiRequest = tlgBot + "/sendMessage?chat_id=" + tlgChat + "&text=" + formattedMessage;
+            AttachmentsHelper.attachAsText("API response: ", response.asString());
+        });
+
+        step("ACT & Assert: send get and assert the response is 200", ()-> {
+            given()
+                    .filter(new AllureRestAssured())
+                    .log().all()
+                    .when()
+                    .get(apiRequest)
+                    .then()
+                    .statusCode(200);
+        });
+    }
 
 }
-//TODO: create same test to ge Fx rate for USD from cbr.ru
