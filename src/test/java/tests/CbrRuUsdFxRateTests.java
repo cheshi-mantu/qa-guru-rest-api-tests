@@ -81,7 +81,6 @@ class CbrRuUsdFxRateTests extends TestBase {
             System.out.println("RESPONSE: " + charCodeValue);
             formattedMessage = "USD FX rate on "+ apiReqPath + " is " + charCodeValue;
             AttachmentsHelper.attachAsText("Returned USD FX rate: ", charCodeValue);
-            AttachmentsHelper.attachAsText("Message to be sent: ", formattedMessage);
         });
 
         step("PREP: Create message for next test", ()->{
@@ -90,7 +89,6 @@ class CbrRuUsdFxRateTests extends TestBase {
 
         step("PREP: Build request params for tlg bot", ()->{
             apiRequest = tlgBot + "/sendMessage?chat_id=" + tlgChat + "&text=" + formattedMessage;
-            AttachmentsHelper.attachAsText("API response: ", response.asString());
         });
 
         step("ACT & Assert: send get and assert the response is 200", ()-> {
