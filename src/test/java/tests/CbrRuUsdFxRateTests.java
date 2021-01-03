@@ -66,7 +66,7 @@ class CbrRuUsdFxRateTests extends TestBase {
             XmlPath xmlpath = new XmlPath(response.asString());
             String charCodeValue = xmlpath.get("ValCurs.Valute.find { it.CharCode == 'USD' }.Value");
             System.out.println("RESPONSE: " + charCodeValue);
-            formattedMessage = "USD FX rate for "+ apiReqPath + " " + charCodeValue;
+            formattedMessage = "USD FX rate on "+ apiReqPath + " is " + charCodeValue;
             AttachmentsHelper.attachAsText("Returned USD FX rate: ", charCodeValue);
         });
     }
