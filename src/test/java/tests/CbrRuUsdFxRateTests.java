@@ -61,14 +61,6 @@ class CbrRuUsdFxRateTests extends TestBase {
         step("Assert response", ()->{
             assertThat(response.statusCode(), is(equalTo(200)));
         });
-
-        step("Assert response", ()->{
-            XmlPath xmlpath = new XmlPath(response.asString());
-            String charCodeValue = xmlpath.get("ValCurs.Valute.find { it.CharCode == 'USD' }.Value");
-            System.out.println("RESPONSE: " + charCodeValue);
-            formattedMessage = "USD FX rate on "+ apiReqPath + " is " + charCodeValue;
-            AttachmentsHelper.attachAsText("Returned USD FX rate: ", charCodeValue);
-        });
     }
 
     @Test
@@ -82,6 +74,16 @@ class CbrRuUsdFxRateTests extends TestBase {
 //            AttachmentsHelper.attachAsText("Telegram chat data: ", tlgChat);
 //
 //        });
+
+        step("Parsing the response from previous test and creating the string to send", ()->{
+            XmlPath xmlpath = new XmlPath(response.asString());
+            String charCodeValue = xmlpath.get("ValCurs.Valute.find { it.CharCode == 'USD' }.Value");
+            System.out.println("RESPONSE: " + charCodeValue);
+            formattedMessage = "USD FX rate on "+ apiReqPath + " is " + charCodeValue;
+            AttachmentsHelper.attachAsText("Returned USD FX rate: ", charCodeValue);
+            AttachmentsHelper.attachAsText("Message to be sent: ", formattedMessage);
+        });
+
         step("PREP: Create message for next test", ()->{
             AttachmentsHelper.attachAsText("Message to send: ", formattedMessage);
         });

@@ -102,6 +102,7 @@ task rest_api_tests(type: Test) {
     useJUnitPlatform {
         includeTags 'rest_api_tests_reqres'
         includeTags 'rest_api_tests_weather'
+        includeTags 'rest_api_tests_fx'
     }
 }
 task rest_api_tests_reqres(type: Test) {
