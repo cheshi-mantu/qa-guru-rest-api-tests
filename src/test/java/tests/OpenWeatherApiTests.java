@@ -99,4 +99,3 @@ class OpenWeatherApiTests extends TestBase {
     }
 
 }
-//TODO: create same test to ge Fx rate for USD from cbr.ru
