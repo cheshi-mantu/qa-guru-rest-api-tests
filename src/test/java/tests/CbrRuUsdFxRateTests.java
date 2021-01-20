@@ -1,59 +1,62 @@
 package tests;
 
 import helpers.AttachmentsHelper;
-import helpers.LoadCredentials;
 import io.qameta.allure.Description;
-import io.qameta.allure.Epic;
 import io.qameta.allure.Feature;
 import io.qameta.allure.Story;
 import io.qameta.allure.restassured.AllureRestAssured;
 import io.restassured.RestAssured;
+import io.restassured.http.ContentType;
+import io.restassured.parsing.Parser;
+import io.restassured.path.xml.XmlPath;
 import io.restassured.response.Response;
 import org.junit.jupiter.api.*;
 
-import static helpers.Environment.*;
+import static helpers.GetDate.getTodaysDate;
 import static io.qameta.allure.Allure.step;
-import static io.restassured.RestAssured.given;
+import static io.restassured.RestAssured.*;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
 
 
-@Epic("QA.GURU QA automation course")
 @Feature("Work with REST API")
-@Story("REST API tests with REST Assured")
-@Tag("rest_api_tests_weather")
+@Story("REST API tests with REST Assured for CBR.ru fx rates")
+@Tag("rest_api_tests_fx")
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
-class OpenWeatherApiTests extends TestBase {
-    private String baseUrlWeather = "http://api.openweathermap.org/data/2.5/weather?";
+class CbrRuUsdFxRateTests extends TestBase {
+    private String baseUrlCbr = "http://www.cbr.ru/scripts/XML_daily.asp?date_req=";
     private String baseUrlTlg = "https://api.telegram.org/";
+    private String apiReqPath;
     private String apiRequest;
     private String formattedMessage = "";
 
     Response response;
+
     @Test
     @Order(1)
-    @DisplayName("Get current for given city")
-    @Description("Get current weather, extract data from ")
+    @DisplayName("Get USD FX rate from CBR for the given date")
+    @Description("Send get request, check the response status is 200, parse the response, extract USD rate")
     void parseJsonFromApiGetRestAssuredOnly() {
-        RestAssured.baseURI = baseUrlWeather;
-
-//        step("Send API key to the test log as attachment", ()-> {
-//        AttachmentsHelper.attachAsText("weatherKey: ", weatherKey);
-//        });
+        RestAssured.baseURI = baseUrlCbr;
+        apiReqPath = getTodaysDate();
 
         step("Building apiRequest string", ()->{
-            apiRequest = "?id=" + cityId + "&units=metric&lang=" + weatherLang + "&appid=" + weatherKey;
+            apiRequest = baseUrlCbr + apiReqPath;
             AttachmentsHelper.attachAsText("apiRequest: ", apiRequest);
+            registerParser("application/xml", Parser.XML);
         });
 
-        step("Build get request for group of users, getting the reponse. Assert the response", ()-> {
+        step("Build get request for the given date", ()-> {
             response = given()
                     .filter(new AllureRestAssured())
                     .log().all()
                     .when()
-                    .get(apiRequest);
-            AttachmentsHelper.attachAsText("API response: ", response.asString());
+                    .get(apiRequest)
+                    .then()
+                    .contentType(ContentType.XML)
+                    .extract().response();
+            AttachmentsHelper.attachAsText("API response: ", response.prettyPrint());
         });
         step("Assert response", ()->{
             assertThat(response.statusCode(), is(equalTo(200)));
@@ -72,29 +75,30 @@ class OpenWeatherApiTests extends TestBase {
 //
 //        });
 
+        step("Parsing the response from previous test and creating the string to send", ()->{
+            XmlPath xmlpath = new XmlPath(response.asString());
+            String charCodeValue = xmlpath.get("ValCurs.Valute.find { it.CharCode == 'USD' }.Value");
+            System.out.println("RESPONSE: " + charCodeValue);
+            formattedMessage = "USD FX rate on "+ apiReqPath + " is " + charCodeValue;
+            AttachmentsHelper.attachAsText("Returned USD FX rate: ", charCodeValue);
+        });
+
         step("PREP: Create message for next test", ()->{
-            formattedMessage = "Город: " +  response.path("name") + "\n" +
-                    "Погода: " + response.path("weather[0].description") + "\n" +
-                    "Температура: " + response.path("main.temp") + "\n" +
-                    "Ощущается: " + response.path("main.feels_like") + "\n" +
-                    "Давление: " + response.path("main.pressure") + "\n" +
-                    "Ветер: " + response.path("wind.speed") + " м/с " + response.path("wind.deg");
             AttachmentsHelper.attachAsText("Message to send: ", formattedMessage);
         });
 
         step("PREP: Build request params for tlg bot", ()->{
             apiRequest = tlgBot + "/sendMessage?chat_id=" + tlgChat + "&text=" + formattedMessage;
-            AttachmentsHelper.attachAsText("API response: ", response.asString());
         });
 
         step("ACT & Assert: send get and assert the response is 200", ()-> {
-                given()
-                .filter(new AllureRestAssured())
-                .log().all()
-                .when()
-                .get(apiRequest)
-                .then()
-                .statusCode(200);
+            given()
+                    .filter(new AllureRestAssured())
+                    .log().all()
+                    .when()
+                    .get(apiRequest)
+                    .then()
+                    .statusCode(200);
         });
     }
 

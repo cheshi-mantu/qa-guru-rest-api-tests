@@ -35,4 +35,4 @@ target/
 .vscode
 .allure/
 gradlew*
-/gradle/*
+/gradle/
