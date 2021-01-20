@@ -36,7 +36,7 @@ ext {
 repositories {
     jcenter()
     mavenCentral()
-    maven {url = "https://dl.bintray.com/qameta/maven-unstable/"}
+    maven {url = "https://dl.bintray.com/qameta/maven-unstable/"} // to run allure testops selective runs
 }
 
 
@@ -55,7 +55,7 @@ dependencies {
     testImplementation "io.qameta.allure:allure-junit-platform:${allureVersion}"
     testImplementation "io.qameta.allure:allure-junit5:${allureVersion}"
 
-    testImplementation "io.qameta.allure:allure-ee-junit-platform:3.28.2"
+    testImplementation "io.qameta.allure:allure-ee-junit-platform:3.38.0" // to run allure test ops selective runs
 
     testImplementation "io.rest-assured:rest-assured:${restAssuredVersion}"
     testImplementation "io.rest-assured:xml-path:${restAssuredVersion}"
