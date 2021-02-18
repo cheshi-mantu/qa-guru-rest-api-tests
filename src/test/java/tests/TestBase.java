@@ -33,7 +33,7 @@ public class TestBase {
             tlgChat = getCredentialsFromJson("ApiTests.secret", "tlg_chat_id");
         }
         AttachmentsHelper.attachAsText("Weather key: ", weatherKey);
-        AttachmentsHelper.attachAsText("Weather key: ", tlgBot);
-        AttachmentsHelper.attachAsText("Weather key: ", tlgChat);
+        AttachmentsHelper.attachAsText("Bot id: ", tlgBot);
+        AttachmentsHelper.attachAsText("Chat id: ", tlgChat);
     }
 }
