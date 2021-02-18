@@ -19,8 +19,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
 
 
-@Feature("Work with REST API")
-@Story("REST API tests with REST Assured for CBR.ru fx rates")
+@Feature("Get current USD exchange rate with REST API")
 @Tag("rest_api_tests_fx")
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)

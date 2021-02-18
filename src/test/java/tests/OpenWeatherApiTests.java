@@ -1,7 +1,6 @@
 package tests;
 
 import helpers.AttachmentsHelper;
-import helpers.LoadCredentials;
 import io.qameta.allure.Description;
 import io.qameta.allure.Epic;
 import io.qameta.allure.Feature;
@@ -19,8 +18,7 @@ import static org.hamcrest.Matchers.*;
 
 
 @Epic("QA.GURU QA automation course")
-@Feature("Work with REST API")
-@Story("REST API tests with REST Assured")
+@Feature("Get current weather with REST API")
 @Tag("rest_api_tests_weather")
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
