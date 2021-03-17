@@ -11,14 +11,15 @@ import io.restassured.response.Response;
 import org.junit.jupiter.api.*;
 
 import static helpers.Environment.*;
+import static io.qameta.allure.Allure.parameter;
 import static io.qameta.allure.Allure.step;
 import static io.restassured.RestAssured.given;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
 
 
-@Epic("QA.GURU QA automation course")
-@Feature("Get current weather with REST API")
+@Epic("Day-to-day stuff automation")
+@Feature("Get current weather forecast from openweather.com with REST API and send to Tlg chat")
 @Tag("rest_api_tests_weather")
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
@@ -31,14 +32,12 @@ class OpenWeatherApiTests extends TestBase {
     Response response;
     @Test
     @Order(1)
-    @DisplayName("Get current for given city")
+    @DisplayName("Get current weather forecast for given city")
     @Description("Get current weather, extract data from ")
     void parseJsonFromApiGetRestAssuredOnly() {
+        parameter("baseUrlWeather", baseUrlWeather);
+        parameter("cityId", cityId);
         RestAssured.baseURI = baseUrlWeather;
-
-//        step("Send API key to the test log as attachment", ()-> {
-//        AttachmentsHelper.attachAsText("weatherKey: ", weatherKey);
-//        });
 
         step("Building apiRequest string", ()->{
             apiRequest = "?id=" + cityId + "&units=metric&lang=" + weatherLang + "&appid=" + weatherKey;

@@ -2,6 +2,7 @@ package tests;
 
 import helpers.AttachmentsHelper;
 import io.qameta.allure.Description;
+import io.qameta.allure.Epic;
 import io.qameta.allure.Feature;
 import io.qameta.allure.restassured.AllureRestAssured;
 import io.restassured.RestAssured;
@@ -17,9 +18,10 @@ import static io.restassured.RestAssured.*;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
+import static io.qameta.allure.Allure.parameter;
 
-
-@Feature("Get current USD exchange rate with REST API")
+@Epic("Day-to-day stuff automation")
+@Feature("Get current USD exchange rate with REST API from cbr.ru")
 @Tag("rest_api_tests_fx")
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
@@ -34,9 +36,10 @@ class CbrRuUsdFxRateTests extends TestBase {
 
     @Test
     @Order(1)
-    @DisplayName("Get USD FX rate from CBR for the given date")
+    @DisplayName("Get USD FX rate from CBR for today")
     @Description("Send get request, check the response status is 200, parse the response, extract USD rate")
     void parseJsonFromApiGetRestAssuredOnly() {
+    parameter("baseUrlCbr", baseUrlCbr);
         RestAssured.baseURI = baseUrlCbr;
         apiReqPath = getTodaysDate();
 
@@ -64,16 +67,19 @@ class CbrRuUsdFxRateTests extends TestBase {
 
     @Test
     @Order(2)
-    @DisplayName("Send Weather data via Tlg bot to chat")
-    @Description("Sending formatted weather to Tlg chat and check server response ")
+    @DisplayName("Send USD Fx rate to from Tlg bot to chat")
+    @Description("Extract USD Fx rate, prepare the message and send formatted message to Tlg chat and check server response")
     void formatResponseAndSendToTlgChat() {
-        RestAssured.baseURI = baseUrlTlg;
-//        step("Sending request data as attach to the test results", ()-> {
-//            AttachmentsHelper.attachAsText("Telegram bot data: ", tlgBot);
-//            AttachmentsHelper.attachAsText("Telegram chat data: ", tlgChat);
-//
-//        });
+        parameter("apiResponse", "see attachment");
+        parameter("tlgBot", "hidden value");
+        parameter("tlgChat", "hidden value");
 
+        RestAssured.baseURI = baseUrlTlg;
+
+        step("Attaching API response from previous step",()->{
+            AttachmentsHelper.attachAsText("apiResponse", response.asString());
+            AttachmentsHelper.attachAsText("baseURI", baseUrlTlg);
+        });
         step("Parsing the response from previous test and creating the string to send", ()->{
             XmlPath xmlpath = new XmlPath(response.asString());
             String charCodeValue = xmlpath.get("ValCurs.Valute.find { it.CharCode == 'USD' }.Value");

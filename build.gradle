@@ -24,7 +24,7 @@ logging.captureStandardOutput LogLevel.INFO
 
 
 ext {
-    allureVersion = '2.13.7'
+    allureVersion = '2.13.8'
     junitVersion = '5.7.0'
     selenideVersion = "5.16.2"
     restAssuredVersion = "4.3.3"
