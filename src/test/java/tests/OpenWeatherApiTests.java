@@ -19,7 +19,7 @@ import static org.hamcrest.Matchers.*;
 
 
 @Epic("Day-to-day stuff automation")
-@Feature("Get current weather forecast from openweather.com with REST API and send to Tlg chat")
+@Feature("Send weather forecast")
 @Tag("rest_api_tests_weather")
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
@@ -32,7 +32,6 @@ class OpenWeatherApiTests extends TestBase {
     Response response;
     @Test
     @Order(1)
-    @Feature("Send weather forecast")
     @Description("Get current weather, extract data from ")
     void parseJsonFromApiGetRestAssuredOnly() {
         parameter("baseUrlWeather", baseUrlWeather);
@@ -59,7 +58,6 @@ class OpenWeatherApiTests extends TestBase {
 
     @Test
     @Order(2)
-    @Feature("Send weather forecast")
     @Description("Sending formatted weather to Tlg chat and check server response ")
     void formatResponseAndSendToTlgChat() {
         RestAssured.baseURI = baseUrlTlg;

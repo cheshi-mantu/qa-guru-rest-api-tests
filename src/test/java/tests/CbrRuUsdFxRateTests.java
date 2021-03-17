@@ -21,7 +21,7 @@ import static org.hamcrest.Matchers.is;
 import static io.qameta.allure.Allure.parameter;
 
 @Epic("Day-to-day stuff automation")
-@Feature("Get current USD exchange rate with REST API from cbr.ru")
+@Feature("Send USD Fx rate")
 @Tag("rest_api_tests_fx")
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
@@ -36,8 +36,7 @@ class CbrRuUsdFxRateTests extends TestBase {
 
     @Test
     @Order(1)
-    @Feature("Send USD Fx rate")
-    @Description("Send get request, check the response status is 200, parse the response, extract USD rate")
+    @Description("Send API request, check the status is 200")
     void parseJsonFromApiGetRestAssuredOnly() {
     parameter("baseUrlCbr", baseUrlCbr);
         RestAssured.baseURI = baseUrlCbr;
@@ -67,8 +66,7 @@ class CbrRuUsdFxRateTests extends TestBase {
 
     @Test
     @Order(2)
-    @Feature("Send USD Fx rate")
-    @Description("Extract USD Fx rate, prepare the message and send formatted message to Tlg chat and check server response")
+    @Description("Extract USD Fx rate, prep. the message, send the message to Tlg chat, check response")
     void formatResponseAndSendToTlgChat() {
         parameter("apiResponse", "see attachment");
         parameter("tlgBot", "hidden value");
