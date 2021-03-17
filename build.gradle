@@ -120,3 +120,9 @@ task rest_api_tests_fx(type: Test) {
         includeTags 'rest_api_tests_fx'
     }
 }
+    task tlg_informing(type: Test) {
+    useJUnitPlatform {
+        includeTags 'rest_api_tests_weather'
+        includeTags 'rest_api_tests_fx'
+    }
+}
