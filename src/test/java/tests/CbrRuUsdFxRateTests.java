@@ -36,7 +36,7 @@ class CbrRuUsdFxRateTests extends TestBase {
 
     @Test
     @Order(1)
-    @DisplayName("Get USD FX rate from CBR for today")
+    @Feature("Send USD Fx rate")
     @Description("Send get request, check the response status is 200, parse the response, extract USD rate")
     void parseJsonFromApiGetRestAssuredOnly() {
     parameter("baseUrlCbr", baseUrlCbr);
@@ -67,7 +67,7 @@ class CbrRuUsdFxRateTests extends TestBase {
 
     @Test
     @Order(2)
-    @DisplayName("Send USD Fx rate to from Tlg bot to chat")
+    @Feature("Send USD Fx rate")
     @Description("Extract USD Fx rate, prepare the message and send formatted message to Tlg chat and check server response")
     void formatResponseAndSendToTlgChat() {
         parameter("apiResponse", "see attachment");
