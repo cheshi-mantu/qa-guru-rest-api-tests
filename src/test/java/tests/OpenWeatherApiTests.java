@@ -32,8 +32,8 @@ class OpenWeatherApiTests extends TestBase {
     Response response;
     @Test
     @Order(1)
-    @Description("Get current weather, extract data from ")
-    void parseJsonFromApiGetRestAssuredOnly() {
+    @Description("Get current weather, store in response, check status is 200 ")
+    void getWeatherForecastTest() {
         parameter("baseUrlWeather", baseUrlWeather);
         parameter("cityId", cityId);
         RestAssured.baseURI = baseUrlWeather;
@@ -59,7 +59,7 @@ class OpenWeatherApiTests extends TestBase {
     @Test
     @Order(2)
     @Description("Sending formatted weather to Tlg chat and check server response ")
-    void formatResponseAndSendToTlgChat() {
+    void formatWeatherResponseAndSendToTlgChat() {
         RestAssured.baseURI = baseUrlTlg;
 //        step("Sending request data as attach to the test results", ()-> {
 //            AttachmentsHelper.attachAsText("Telegram bot data: ", tlgBot);

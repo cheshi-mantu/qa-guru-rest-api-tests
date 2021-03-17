@@ -36,8 +36,8 @@ class CbrRuUsdFxRateTests extends TestBase {
 
     @Test
     @Order(1)
-    @Description("Send API request, check the status is 200")
-    void parseJsonFromApiGetRestAssuredOnly() {
+    @Description("Send API request for USD Fx rate, store in response, check the status is 200")
+    void getUSDFxRateFromCbrTest() {
     parameter("baseUrlCbr", baseUrlCbr);
         RestAssured.baseURI = baseUrlCbr;
         apiReqPath = getTodaysDate();
@@ -67,7 +67,7 @@ class CbrRuUsdFxRateTests extends TestBase {
     @Test
     @Order(2)
     @Description("Extract USD Fx rate, prep. the message, send the message to Tlg chat, check response")
-    void formatResponseAndSendToTlgChat() {
+    void formatCBRResponseAndSendToTlgChat() {
         parameter("apiResponse", "see attachment");
         parameter("tlgBot", "hidden value");
         parameter("tlgChat", "hidden value");
