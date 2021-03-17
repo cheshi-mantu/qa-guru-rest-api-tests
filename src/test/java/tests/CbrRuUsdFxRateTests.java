@@ -3,7 +3,6 @@ package tests;
 import helpers.AttachmentsHelper;
 import io.qameta.allure.Description;
 import io.qameta.allure.Feature;
-import io.qameta.allure.Story;
 import io.qameta.allure.restassured.AllureRestAssured;
 import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
@@ -16,7 +15,8 @@ import static helpers.GetDate.getTodaysDate;
 import static io.qameta.allure.Allure.step;
 import static io.restassured.RestAssured.*;
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.*;
+import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.is;
 
 
 @Feature("Get current USD exchange rate with REST API")
