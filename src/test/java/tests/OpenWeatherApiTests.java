@@ -32,6 +32,7 @@ class OpenWeatherApiTests extends TestBase {
     Response response;
     @Test
     @Order(1)
+    @DisplayName("Get weather forecast for given city")
     @Description("Get current weather, store in response, check status is 200 ")
     void getWeatherForecastTest() {
         parameter("baseUrlWeather", baseUrlWeather);
@@ -58,6 +59,7 @@ class OpenWeatherApiTests extends TestBase {
 
     @Test
     @Order(2)
+    @DisplayName("Extract weather for given city and send")
     @Description("Sending formatted weather to Tlg chat and check server response ")
     void formatWeatherResponseAndSendToTlgChat() {
         RestAssured.baseURI = baseUrlTlg;

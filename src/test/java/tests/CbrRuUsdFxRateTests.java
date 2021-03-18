@@ -36,6 +36,7 @@ class CbrRuUsdFxRateTests extends TestBase {
 
     @Test
     @Order(1)
+    @DisplayName("Get USD Fx rate from cbr.ru, store in response, check response status")
     @Description("Send API request for USD Fx rate, store in response, check the status is 200")
     void getUSDFxRateFromCbrTest() {
     parameter("baseUrlCbr", baseUrlCbr);
@@ -66,6 +67,7 @@ class CbrRuUsdFxRateTests extends TestBase {
 
     @Test
     @Order(2)
+    @DisplayName("Extract Fx rate for USD, create message and send")
     @Description("Extract USD Fx rate, prep. the message, send the message to Tlg chat, check response")
     void formatCBRResponseAndSendToTlgChat() {
         parameter("apiResponse", "see attachment");
