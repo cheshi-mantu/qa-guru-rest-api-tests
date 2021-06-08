@@ -1,10 +1,7 @@
 package tests;
 
 import helpers.AttachmentsHelper;
-import io.qameta.allure.Description;
-import io.qameta.allure.Epic;
-import io.qameta.allure.Feature;
-import io.qameta.allure.Story;
+import io.qameta.allure.*;
 import io.qameta.allure.restassured.AllureRestAssured;
 import io.restassured.RestAssured;
 import io.restassured.response.Response;
@@ -18,11 +15,11 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
 
 
-@Epic("Day-to-day stuff automation")
 @Feature("Send weather forecast")
 @Tag("rest_api_tests_weather")
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
+@Owner("egorivanov")
 class OpenWeatherApiTests extends TestBase {
     private String baseUrlWeather = "http://api.openweathermap.org/data/2.5/weather?";
     private String baseUrlTlg = "https://api.telegram.org/";
@@ -63,11 +60,6 @@ class OpenWeatherApiTests extends TestBase {
     @Description("Sending formatted weather to Tlg chat and check server response ")
     void formatWeatherResponseAndSendToTlgChat() {
         RestAssured.baseURI = baseUrlTlg;
-//        step("Sending request data as attach to the test results", ()-> {
-//            AttachmentsHelper.attachAsText("Telegram bot data: ", tlgBot);
-//            AttachmentsHelper.attachAsText("Telegram chat data: ", tlgChat);
-//
-//        });
 
         step("PREP: Create message for next test", ()->{
             formattedMessage = "Город: " +  response.path("name") + "\n" +
