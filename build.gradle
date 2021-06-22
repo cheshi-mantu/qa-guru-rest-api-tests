@@ -24,9 +24,8 @@ logging.captureStandardOutput LogLevel.INFO
 
 
 ext {
-    allureVersion = '2.13.9'
+    allureVersion = '2.14.0'
     junitVersion = '5.7.0'
-    selenideVersion = "5.16.2"
     restAssuredVersion = "4.3.3"
     orgJsonVersion = "20201115"
     orgAspectjVersion = "1.9.6"
@@ -53,6 +52,7 @@ dependencies {
     testImplementation "io.qameta.allure:allure-rest-assured:${allureVersion}"
     testImplementation "io.qameta.allure:allure-junit-platform:${allureVersion}"
     testImplementation "io.qameta.allure:allure-junit5:${allureVersion}"
+
 
     testImplementation "io.rest-assured:rest-assured:${restAssuredVersion}"
     testImplementation "io.rest-assured:xml-path:${restAssuredVersion}"

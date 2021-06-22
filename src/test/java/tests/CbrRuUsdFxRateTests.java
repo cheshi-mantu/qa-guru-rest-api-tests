@@ -4,6 +4,7 @@ import helpers.AttachmentsHelper;
 import io.qameta.allure.Description;
 import io.qameta.allure.Epic;
 import io.qameta.allure.Feature;
+import io.qameta.allure.Owner;
 import io.qameta.allure.restassured.AllureRestAssured;
 import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
@@ -20,11 +21,11 @@ import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
 import static io.qameta.allure.Allure.parameter;
 
-@Epic("Day-to-day stuff automation")
 @Feature("Send USD Fx rate")
 @Tag("rest_api_tests_fx")
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
+@Owner("egorivanov")
 class CbrRuUsdFxRateTests extends TestBase {
     private String baseUrlCbr = "http://www.cbr.ru/scripts/XML_daily.asp?date_req=";
     private String baseUrlTlg = "https://api.telegram.org/";
