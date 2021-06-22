@@ -24,7 +24,7 @@ logging.captureStandardOutput LogLevel.INFO
 
 
 ext {
-    allureVersion = '2.13.8'
+    allureVersion = '2.13.9'
     junitVersion = '5.7.0'
     selenideVersion = "5.16.2"
     restAssuredVersion = "4.3.3"
@@ -36,7 +36,6 @@ ext {
 repositories {
     jcenter()
     mavenCentral()
-    maven {url = "https://dl.bintray.com/qameta/maven-unstable/"} // to run allure testops selective runs
 }
 
 
@@ -54,8 +53,6 @@ dependencies {
     testImplementation "io.qameta.allure:allure-rest-assured:${allureVersion}"
     testImplementation "io.qameta.allure:allure-junit-platform:${allureVersion}"
     testImplementation "io.qameta.allure:allure-junit5:${allureVersion}"
-
-    testImplementation "io.qameta.allure:allure-ee-junit-platform:3.38.0" // to run allure test ops selective runs
 
     testImplementation "io.rest-assured:rest-assured:${restAssuredVersion}"
     testImplementation "io.rest-assured:xml-path:${restAssuredVersion}"
